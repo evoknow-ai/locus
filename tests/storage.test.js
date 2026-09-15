@@ -1,0 +1,10 @@
+import {test,beforeEach} from 'node:test';
+import assert from 'node:assert/strict';
+import {fresh,project,startTimer} from '../model.js';
+import {read,transact,restoreRecovery} from '../storage.js';
+let db,failWrite,tail;
+beforeEach(()=>{db={};failWrite=false;tail=Promise.resolve();Object.defineProperty(globalThis,'navigator',{configurable:true,value:{locks:{request(_name,fn){const result=tail.then(fn);tail=result.catch(()=>{});return result;}}}});globalThis.chrome={storage:{local:{async get(keys){if(typeof keys==='string')keys=[keys];return Object.fromEntries(keys.map(k=>[k,structuredClone(db[k]) ]));},async set(v){if(failWrite)throw Error('Disk full');db={...db,...structuredClone(v)};}}}};});
+test('concurrent transactions read the newest state and retain both projects',async()=>{await Promise.all([transact(s=>s.projects.push(project('A'))),transact(s=>s.projects.push(project('B')))]);const s=await read();assert.deepEqual(s.projects.map(p=>p.name),['A','B']);assert.equal(s.revision,2);});
+test('failed storage write leaves persisted workspace unchanged',async()=>{await transact(s=>s.projects.push(project('A')));failWrite=true;await assert.rejects(transact(s=>s.projects=[]));assert.equal((await read()).projects.length,1);});
+test('replacement keeps recovery snapshot and pauses its timer at capture',async()=>{const s=fresh();s.projects.push(project('Before'));startTimer(s,s.projects[0].id,null,Date.now()-10000);db.locusData=s;await transact(s=>{s.projects=[];s.timer=null;},{backup:true});assert.equal(db.locusRecovery.timer,null);assert.ok(db.locusRecovery.projects[0].sessions[0].end-db.locusRecovery.projects[0].sessions[0].start>=10000);await restoreRecovery();assert.equal((await read()).projects[0].name,'Before');assert.equal(db.locusRecovery.projects.length,0);});
+test('failed mutation cannot partially write a workspace',async()=>{await transact(s=>s.projects.push(project('A')));await assert.rejects(transact(s=>{s.projects=[];throw Error('Invalid input');}));assert.equal((await read()).projects.length,1);});

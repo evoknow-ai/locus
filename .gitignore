@@ -1,0 +1,6 @@
+dist/
+node_modules/
+__pycache__/
+.DS_Store
+Locus_*_*.json
+locus-backup-*.json

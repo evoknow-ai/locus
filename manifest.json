@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Locus \u2014 Personal Projects",
+  "short_name": "Locus",
+  "version": "1.1.0",
+  "minimum_chrome_version": "120",
+  "description": "A calm home for your projects. Tasks, notes, progress, time tracking and visual reports. Entirely local.",
+  "author": "Mohammed Kabir \u00b7 EVOKNOW",
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "alarms",
+    "downloads"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Open Locus",
+    "default_icon": {
+      "16": "icons/16.png",
+      "32": "icons/32.png",
+      "48": "icons/48.png",
+      "128": "icons/128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'; connect-src 'none'"
+  }
+}

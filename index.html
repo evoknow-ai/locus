@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Locus · Your space to move forward</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="themes.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#projects"><img src="icons/48.png" alt=""><span>locus<span class="brand-dot">.</span></span></a>
+    <div class="workspace-label">YOUR PERSONAL SPACE</div>
+    <nav aria-label="Main navigation">
+      <button data-nav="projects"><span aria-hidden="true">▦</span> Projects <span id="project-count" class="nav-count">0</span></button>
+      <button data-nav="reports"><span aria-hidden="true">◴</span> Reports</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="local-card"><span class="live-dot"></span><strong>Just you. Just here.</strong><p>Your projects stay in this browser.<br>No account. No cloud.</p></div>
+      <button data-nav="backup" class="quiet">⇅ &nbsp; Backup & restore</button>
+      <button data-nav="appearance" class="quiet">◈ &nbsp; Appearance</button>
+      <button id="theme-toggle" class="quiet">◐ &nbsp; Use dark mode</button>
+      <button data-nav="guide" class="quiet">? &nbsp; User guide & tour</button>
+      <footer><button data-nav="credits">Credits</button><span>v1.1.0 · MIT License</span></footer>
+    </div>
+  </aside>
+  <main id="main" tabindex="-1"></main>
+  <div id="timer-dock" hidden></div>
+  <dialog id="modal"><div id="modal-content"></div></dialog>
+  <dialog id="tour-dialog" aria-label="Locus guided tour"></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <input type="file" id="import-file" accept="application/json,.json" hidden>
+</body>
+</html>
